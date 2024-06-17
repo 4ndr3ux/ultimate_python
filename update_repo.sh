@@ -8,7 +8,7 @@
 
 
 # Solicitar el mensaje del commit al usuario
-echo "Introduce el mensaje del commit:"
+echo "Introduce el mensaje del commit: "
 read commit_message
 
 # Actualizar el repositorio
