@@ -2,8 +2,7 @@
 #     print(i, i * 'Hola, Mundo ')
 
 objetivo = 8
-for i in range(20
-               +):
+for i in range(20):
     print(i)
     if i == objetivo:
         print("Objetivo Encontrado: ", objetivo)
