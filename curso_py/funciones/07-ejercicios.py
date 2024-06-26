@@ -15,5 +15,4 @@ print("Abba:", es_palindromo("Abba"))  # True
 print("Reconocer:", es_palindromo("Reconocer"))  # True
 print("Amo la paloma:", es_palindromo("Amo la paloma"))  # True
 print("Hola Mundo:", es_palindromo("Hola Mundo"))  # False
-print("menem menem menem :", es_palindromo(
-    "menem   menem  menem  "))  # True
+print("menem menem menem :", es_palindromo("menem   menem  menem  "))  # True
