@@ -1,0 +1,24 @@
+---
+- hosts: monitoring
+  become: yes
+  tasks:
+    - name: Instalar Zabbix Server y dependencias
+      yum:
+        name: 
+          - zabbix-server-mysql
+          - zabbix-web-mysql
+          - zabbix-agent
+        state: present
+
+    - name: Iniciar y habilitar Zabbix Server
+      systemd:
+        name: zabbix-server
+        state: started
+        enabled: yes
+
+    - name: Iniciar y habilitar Zabbix Agent
+      systemd:
+        name: zabbix-agent
+        state: started
+        enabled: yes
+

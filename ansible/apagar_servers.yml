@@ -1,0 +1,7 @@
+- name: Apagar servidores
+  hosts: all  # O reemplaza 'all' por un grupo de hosts si los tienes definidos
+  become: yes  # Para ejecutar las tareas con privilegios de root
+  tasks:
+    - name: Apagar servidores ROCKY 9
+      command: shutdown -h now
+

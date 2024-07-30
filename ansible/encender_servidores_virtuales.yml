@@ -1,0 +1,45 @@
+#---
+#- name: Iniciar máquinas virtuales en KVM
+#  hosts: 192.168.0.54
+#  become: true#
+
+#  tasks:
+#    - name: Iniciar máquina virtual web1
+#      ansible.builtin.command: virsh start web1 #
+
+#    - name: Iniciar máquina virtual web2
+#      ansible.builtin.command: virsh start web2 #
+
+#    - name: Iniciar máquina virtual MON1
+#      ansible.builtin.command: virsh start MON1#
+
+#    - name: Iniciar máquina virtual LB1
+#      ansible.builtin.command: virsh start LB1 #
+
+#    - name: Iniciar máquina virtual BACKUP1
+#      ansible.builtin.command: virsh start BACKUP1 #
+
+---
+- name: Iniciar máquinas virtuales en KVM
+  hosts: 192.168.0.54
+  become: true
+  tasks:
+    - name: Iniciar máquina virtual web1
+      shell:
+            "virsh start web1" #
+            
+    - name: Iniciar máquina virtual web2
+      shell:
+            "virsh start web2" #
+
+    - name: Iniciar máquina virtual LB1
+      shell:
+            "virsh start LB1" #
+
+    - name: Iniciar máquina virtual BACKUP1
+      shell:
+            "virsh start BACKUP1" #
+            
+    - name: Iniciar máquina virtual DB1
+      shell:
+            "virsh start DB1" #

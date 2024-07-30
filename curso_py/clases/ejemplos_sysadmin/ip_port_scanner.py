@@ -23,4 +23,4 @@ class PortScanner:
 # Uso de la clase
 ip = input("ingrese la IP para escanear: ")
 scanner = PortScanner(ip)
-scanner.scan_ports(20, 25)
+scanner.scan_ports(20, 100)

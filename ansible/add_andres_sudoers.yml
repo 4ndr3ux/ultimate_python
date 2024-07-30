@@ -1,0 +1,18 @@
+---
+- name: Add user 'andres' to sudoers
+  hosts: all
+  become: true
+  tasks:
+    - name: Ensure 'andres' is in the 'sudo' group
+      user:
+        name: andres
+        groups: sudo
+        append: yes
+
+    - name: Ensure 'andres' has passwordless sudo
+      lineinfile:
+        path: /etc/sudoers
+        state: present
+        line: 'andres ALL=(ALL) NOPASSWD:ALL'
+        validate: 'visudo -cf %s'
+

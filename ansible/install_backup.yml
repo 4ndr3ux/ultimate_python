@@ -1,0 +1,17 @@
+---
+- hosts: backup
+  become: yes
+  tasks:
+    - name: Instalar rsync
+      yum:
+        name: rsync
+        state: present
+
+    - name: Configurar directorio de backup
+      file:
+        path: /backup
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+

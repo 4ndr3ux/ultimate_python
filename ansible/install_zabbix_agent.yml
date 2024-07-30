@@ -1,0 +1,58 @@
+---
+# Playbook to install and configure Zabbix Agent on Red Hat 9 servers
+
+- name: Install and configure Zabbix Agent
+  hosts: all  # Specify your group or hosts from your Ansible inventory
+  become: yes # Use sudo to execute tasks
+  tasks:
+
+    - name: Add Zabbix repository
+      yum:
+        name: https://repo.zabbix.com/zabbix/7.0/rocky/9/x86_64/zabbix-release-7.0-4.el9.noarch.rpm
+        state: present
+      tags: zabbix_repo
+
+    - name: Clean yum cache
+      command: yum clean all
+      tags: clean_cache
+
+    - name: Install Zabbix Agent
+      yum:
+        name: zabbix-agent
+        state: present
+      tags: install_zabbix_agent
+
+    - name: Configure Zabbix Agent
+      lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+        state: present
+      loop:
+        - { regexp: '^Server=', line: 'Server=192.168.0.65' }
+        - { regexp: '^ServerActive=', line: 'ServerActive=192.168.0.65' }
+        - { regexp: '^# HostMetadata=', line: 'HostMetadata=Linux' }
+        - { regexp: '^# HostnameItem=', line: 'HostnameItem=system.hostname' }
+      tags: configure_zabbix_agent
+
+    - name: Start and enable Zabbix Agent service
+      systemd:
+        name: zabbix-agent
+        state: started
+        enabled: yes
+      tags: start_enable_zabbix_agent
+
+    - name: Open Zabbix Agent port in firewall
+      firewalld:
+        service: zabbix-agent
+        zone: public
+        permanent: yes
+        state: enabled
+      tags: firewall_zabbix_agent
+
+    - name: Reload firewall to apply changes
+      firewalld:
+        state: reloaded
+      tags: reload_firewall
+
+

@@ -1,0 +1,15 @@
+---
+- hosts: dbservers
+  become: yes
+  tasks:
+    - name: Instalar MariaDB
+      yum:
+        name: mariadb-server
+        state: present
+
+    - name: Iniciar y habilitar MariaDB
+      systemd:
+        name: mariadb
+        state: started
+        enabled: yes
+

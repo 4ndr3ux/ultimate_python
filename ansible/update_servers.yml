@@ -1,0 +1,65 @@
+---
+- name: Actualizar servidores Rocky Linux 9
+  hosts: all
+  become: yes
+  vars:
+    update_success: false
+
+  tasks:
+    - name: Verificar si el sistema es Rocky Linux 9
+      assert:
+        that:
+          - ansible_distribution == 'Rocky'
+          - ansible_distribution_major_version == '9'
+        fail_msg: "Este playbook solo funciona en Rocky Linux 9"
+        success_msg: "Sistema verificado: Rocky Linux 9"
+
+    - name: Actualizar caché de paquetes
+      dnf:
+        update_cache: yes
+      register: cache_update
+      ignore_errors: true
+
+    - name: Mostrar error si la actualización de caché falla
+      fail:
+        msg: "Error al actualizar la caché de paquetes"
+      when: cache_update is failed
+
+    - name: Actualizar todos los paquetes
+      dnf:
+        name: "*"
+        state: latest
+      register: update_result
+      ignore_errors: true
+
+    - name: Mostrar error si la actualización falla
+      fail:
+        msg: "Error al actualizar los paquetes"
+      when: update_result is failed
+
+    - name: Marcar la actualización como exitosa
+      set_fact:
+        update_success: true
+      when: update_result is success
+
+    - name: Mostrar mensaje de éxito
+      debug:
+        msg: "Actualización exitosa en {{ inventory_hostname }}"
+      when: update_success
+
+    - name: Preguntar si se desea reiniciar
+      pause:
+        prompt: "¿Desea reiniciar los servidores? (s/n)"
+      register: reiniciar_respuesta
+      when: update_success
+
+    - name: Reiniciar servidores
+      reboot:
+      when: 
+        - update_success
+        - reiniciar_respuesta.user_input | lower == 's'
+
+  post_tasks:
+    - name: Resumen final
+      debug:
+        msg: "{{ 'Actualización completada con éxito' if update_success else 'La actualización falló o no se completó' }}"
